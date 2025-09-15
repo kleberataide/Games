@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aventura dos Detetives das Palavras</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+        :root {
+            --primary-color: #6a1b9a; /* Roxo */
+            --secondary-color: #ff9800; /* Laranja */
+            --correct-color: #4caf50; /* Verde */
+            --wrong-color: #f44336; /* Vermelho */
+            --bg-color: #f3e5f5; /* Roxo claro */
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .story {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .game-area {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        #question-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        #question-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-color);
+            min-height: 50px;
+        }
+
+        #question-text {
+            margin: 0;
+        }
+
+        .audio-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            transition: transform 0.2s ease;
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 1rem;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-true {
+            background-color: var(--correct-color);
+            color: white;
+        }
+
+        .btn-false {
+            background-color: var(--wrong-color);
+            color: white;
+        }
+
+        .btn-true:hover, .btn-false:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .message-box {
+            min-height: 80px;
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+
+        #next-btn, #start-btn, #restart-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            margin-top: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        #next-btn:hover, #start-btn:hover, #restart-btn:hover {
+            background-color: #ffb74d;
+            transform: scale(1.05);
+        }
+
+        .score-box {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-top: 1rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 id="game-title">Aventura dos Detetives das Palavras</h1>
+        <div id="start-screen">
+            <p class="story">
+                Olá, pequeno detetive! Meu nome é Professor Wisdom e preciso da sua ajuda! Em um lugar muito, muito distante, existe a cidade de "Adjective-Ville", onde todas as palavras são um pouco... desorganizadas! Precisamos da sua inteligência para arrumar essa bagunça. Você está pronto para essa missão?
+            </p>
+            <button id="start-btn" class="btn">Começar a Missão!</button>
+        </div>
+
+        <div id="game-screen" class="game-area">
+            <img id="question-image" src="" alt="Imagem da pergunta">
+            <div id="question-container">
+                <span id="question-text"></span>
+                <button id="audio-btn" class="audio-btn">🔊</button>
+            </div>
+            <div id="message-box" class="message-box"></div>
+            <div class="buttons-container" id="choice-buttons">
+                <button id="true-btn" class="btn btn-true">True</button>
+                <button id="false-btn" class="btn btn-false">False</button>
+            </div>
+            <button id="next-btn" class="btn hidden">Próxima Questão</button>
+            <div id="score-box" class="score-box">Pontuação: 0</div>
+        </div>
+
+        <div id="end-screen" class="hidden">
+            <h1>Missão Concluída!</h1>
+            <p class="story">Parabéns, detetive! Você organizou as palavras de Adjective-Ville e se tornou um especialista em inglês!</p>
+            <div id="final-score" class="score-box"></div>
+            <button id="restart-btn" class="btn">Jogar Novamente</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // Fase 1: Gadgets
+            { 
+                q: "A 'cell phone' is the 'smallest' gadget in this group.", 
+                answer: true, 
+                explanation: "Muito bem, detetive! O celular é frequentemente o gadget menor. **Small** (Pequeno) > **Smaller than** (Menor que) > **Smallest** (O menor).",
+                image: "https://drive.google.com/uc?id=SEU_ID_DA_IMAGEM_AQUI"
+            },
+            { 
+                q: "A 'tablet' is 'faster than' a 'laptop'.", 
+                answer: false, 
+                explanation: "Quase lá! Um tablet é mais rápido em algumas coisas, mas o laptop geralmente é **faster than** (mais rápido que) um tablet. **Fast** (Rápido) > **Faster than** (Mais rápido que) > **Fastest** (O mais rápido).",
+                image: "https://drive.google.com/uc?id=SEU_ID_DA_IMAGEM_AQUI" 
+            },
+            { 
+                q: "An 'electric toothbrush' helps make your teeth the 'cleanest'.", 
+                answer: true, 
+                explanation: "Muito bem! Uma escova de dentes elétrica ajuda a deixar os dentes **cleaner than** (mais limpos que) uma escova comum. **Clean** (Limpo) > **Cleaner than** (Mais limpo que) > **Cleanest** (O mais limpo).",
+                image: "https://drive.google.com/uc?id=SEU_ID_DA_IMAGEM_AQUI" 
+            },
+            { 
+                q: "An 'elevator' is the 'tallest' thing in a building.", 
+                answer: false, 
+                explanation: "Quase lá! O elevador pode ser **tall**, mas o prédio todo é o **tallest** (o mais alto). **Tall** (Alto) > **Taller than** (Mais alto que) > **Tallest** (O mais alto).",
+                image: "https://drive.google.com/uc?id=SEU_ID_DA_IMAGEM_AQUI" 
+            },
+            { 
+                q: "A 'flashlight' is 'brighter than' a candle.", 
+                answer: true, 
+                explanation: "Isso mesmo! Uma lanterna é **brighter than** (mais brilhante que) uma vela. **Bright** (Brilhante) > **Brighter than** (Mais brilhante que) > **Brightest** (O mais brilhante).",
+                image: "https://drive.google.com/uc?id=SEU_ID_DA_IMAGEM_AQUI" 
+            },
+            { 
+                q: "An 'electric fan' is 'faster than' a turtle.", 
+                answer: true, 
+                explanation: "Claro! Um ventilador é **faster than** (mais rápido que) uma tartaruga. **Fast** (Rápido) > **Faster than** (Mais rápido que) > **Fastest** (O mais rápido).",
+                image: "https://drive.google.com/uc?id=SEU_ID_DA_IMAGEM_AQUI" 
+            },
+            { 
+                q: "A 'walkie-talkie' is 'louder than' a voice.", 
+                answer: true, 
+                explanation: "Isso mesmo! O walkie-talkie torna o som **louder than** (mais alto que) a sua voz. **Loud** (Alto) > **Louder than** (Mais alto que) > **Loudest** (O mais alto).",
+                image: "https://drive.google.com/uc?id=SEU_ID_DA_IMAGEM_AQUI" 
+            },
+            { 
+                q: "A 'laptop' is 'more expensive than' a 'cell phone'.", 
+                answer: true, 
+                explanation: "Correto! Um laptop é **more expensive than** (mais caro que) um celular. **Expensive** (Caro) > **More expensive than** (Mais caro que) > **Most expensive** (O mais caro).",
+                image: "https://drive.google.com/uc?id=SEU_ID_DA_IMAGEM_AQUI"
+            },
+            { 
+                q: "A 'game console' is 'the most fun' gadget.", 
+                answer: true, 
+                explanation: "Essa é a resposta mais divertida! Muitas pessoas acham o console o **most fun** (o mais divertido). **Fun** (Divertido) > **More fun than** (Mais divertido que) > **Most fun** (O mais divertido).",
+                image: "https://drive.google.com/uc?id=SEU_ID_DA_IMAGEM_AQUI"
+            },
+            
+            // Fase 2: In the Hospital
+            { 
+                q: "If you have a 'toothache', you should visit a 'doctor'.", 
+                answer: true, 
+                explanation: "Correto! Se você tem **toothache** (dor de dente), o melhor é um dentista, mas um **doctor** (médico) pode te ajudar também. **Earache** (Dor de ouvido), **headache** (dor de cabeça).",
+                image: "https://drive.google.com/uc?id=SEU_ID_DA_IMAGEM_AQUI"
+            },
+            { 
+                q: "A 'cold' is 'worse than' a 'stomachache'.", 
+                answer: false, 
+                explanation: "Quase lá! Geralmente, uma dor de estômago (**stomachache**) pode ser **worse than** (pior que) um resfriado (**cold**). **Bad** (Ruim) > **Worse than** (Pior que) > **Worst** (O pior).",
+                image: "https://drive.google.com/uc?id=SEU_ID_DA_IMAGEM_AQUI"
+            },
+            { 
+                q: "A 'nurse' is 'kinder than' a 'doctor'.", 
+                answer: false, 
+                explanation: "Essa é difícil, mas ambos são gentis. Não se pode dizer que um é mais gentil que o outro! **Kind** (Gentil) > **Kinder than** (Mais gentil que) > **Kindest** (O mais gentil).",
+                image: "https://drive.google.com/uc?id=SEU_ID_DA_IMAGEM_AQUI"
+            },
+            { 
+                q: "The 'doctor' is the most important person in the hospital.", 
+                answer: false, 
+                explanation: "Essa é uma pegadinha! Todos no hospital, do **doctor** à **nurse**, são igualmente importantes. Não existe um **most important** (o mais importante).",
+                image: "https://drive.google.com/uc?id=SEU_ID_DA_IMAGEM_AQUI"
+            },
+
+            // Fase 3: Past Simple
+            { 
+                q: "The past simple of 'walk' is 'walked'.", 
+                answer: true, 
+                explanation: "Isso mesmo! O passado de **walk** (caminhar) é **walked** (caminhou/caminhei).",
+                image: "https://drive.google.com/uc?id=SEU_ID_DA_IMAGEM_AQUI"
+            },
+            { 
+                q: "Yesterday, I 'play' with my friends.", 
+                answer: false, 
+                explanation: "Essa está errada. O passado de **play** (brincar) é **played** (brincou/brinquei). A frase correta é 'Yesterday, I **played** with my friends'.",
+                image: "https://drive.google.com/uc?id=SEU_ID_DA_IMAGEM_AQUI"
+            },
+            { 
+                q: "She 'watched' a movie last night.", 
+                answer: true, 
+                explanation: "Excelente! O passado de **watch** (assistir) é **watched** (assistiu/assisti).",
+                image: "https://drive.google.com/uc?id=SEU_ID_DA_IMAGEM_AQUI"
+            },
+            { 
+                q: "He 'smiled' when he saw the funny dog.", 
+                answer: true, 
+                explanation: "Perfeito! O passado de **smile** (sorrir) é **smiled** (sorriu).",
+                image: "https://drive.google.com/uc?id=SEU_ID_DA_IMAGEM_AQUI"
+            },
+            { 
+                q: "Last week, my family 'visit' the museum.", 
+                answer: false, 
+                explanation: "Quase! O passado de **visit** (visitar) é **visited** (visitou/visitei). A frase correta é 'Last week, my family **visited** the museum'.",
+                image: "https://drive.google.com/uc?id=SEU_ID_DA_IMAGEM_AQUI"
+            },
+            { 
+                q: "I 'listened' to music on my new headphones.", 
+                answer: true, 
+                explanation: "Correto! O passado de **listen** (ouvir) é **listened** (ouviu/ouvi).",
+                image: "https://drive.google.com/uc?id=SEU_ID_DA_IMAGEM_AQUI"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const startScreen = document.getElementById('start-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const endScreen = document.getElementById('end-screen');
+        const startBtn = document.getElementById('start-btn');
+        const trueBtn = document.getElementById('true-btn');
+        const falseBtn = document.getElementById('false-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const questionImage = document.getElementById('question-image');
+        const questionText = document.getElementById('question-text');
+        const audioBtn = document.getElementById('audio-btn');
+        const messageBox = document.getElementById('message-box');
+        const scoreBox = document.getElementById('score-box');
+        const finalScore = document.getElementById('final-score');
+        const choiceButtons = document.getElementById('choice-buttons');
+        
+        const synth = window.speechSynthesis;
+        let utterance = new SpeechSynthesisUtterance();
+        utterance.lang = 'en-US'; 
+
+        startBtn.addEventListener('click', startGame);
+        trueBtn.addEventListener('click', () => checkAnswer(true));
+        falseBtn.addEventListener('click', () => checkAnswer(false));
+        nextBtn.addEventListener('click', nextQuestion);
+        restartBtn.addEventListener('click', restartGame);
+        audioBtn.addEventListener('click', readQuestion);
+
+        function startGame() {
+            startScreen.classList.add('hidden');
+            gameScreen.style.display = 'flex';
+            score = 0;
+            currentQuestionIndex = 0;
+            updateScore();
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentQuestionIndex < questions.length) {
+                const question = questions[currentQuestionIndex];
+                questionImage.src = question.image;
+                questionText.textContent = question.q;
+                messageBox.innerHTML = '';
+                choiceButtons.style.display = 'flex';
+                nextBtn.classList.add('hidden');
+                
+            } else {
+                showEndScreen();
+            }
+        }
+
+        function checkAnswer(userAnswer) {
+            const question = questions[currentQuestionIndex];
+            choiceButtons.style.display = 'none';
+
+            const isCorrect = userAnswer === question.answer;
+
+            if (isCorrect) {
+                score++;
+                messageBox.innerHTML = `**Certo!** 🎉 <br> ${question.explanation}`;
+            } else {
+                messageBox.innerHTML = `**Errado!** 😢 <br> ${question.explanation}`;
+            }
+            
+            updateScore();
+            nextBtn.classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            showQuestion();
+        }
+
+        function updateScore() {
+            scoreBox.textContent = `Pontuação: ${score}`;
+        }
+
+        function showEndScreen() {
+            gameScreen.style.display = 'none';
+            endScreen.classList.remove('hidden');
+            finalScore.textContent = `${score} de ${questions.length}`;
+        }
+
+        function restartGame() {
+            endScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+        }
+
+        function readQuestion() {
+            const text = questionText.textContent;
+            utterance.text = text;
+            synth.speak(utterance);
+        }
+    </script>
+</body>
+</html>
