@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Phrasal Verbs: BACK (With Flor & Paixão)</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f4f4f4; }
+        .question-container { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .options button { display: block; width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; text-align: left; }
+        .options button:hover { background-color: #e9e9e9; }
+        .feedback { margin-top: 15px; padding: 10px; border-radius: 4px; display: none; }
+        .correct { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .incorrect { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        img { max-width: 100%; height: auto; border-radius: 8px; margin-top: 10px; }
+        .translation { font-style: italic; color: #666; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <h1>Quiz: Dominando o Phrasal Verb "BACK"</h1>
+	<h2> (by Flor & Paixão)</h2>
+    <div id="quiz"></div>
+
+    <script>
+        const questions = [
+            // Quiz Prático Inicial (4 de 5 - ajustado para múltipla escolha)
+            {
+                q: "The company promised to fund us, but they decided to ________ at the last minute.",
+                options: ["Back out", "Back down", "Back up", "Back off"],
+                correct: 0,
+                img: "",
+                trans: "A empresa prometeu nos financiar, mas decidiram desistir no último minuto. [cite: 29, 31, 41]",
+                expl: "Back out é específico para desistir de contratos e promessas. [cite: 42, 43]"
+            },
+            {
+                q: "I'm telling the truth! My boss can ________ me ________ if you call him.",
+                options: ["back / off", "back / down", "back / up", "back / into"],
+                correct: 2,
+                img: "",
+                trans: "Estou falando a verdade! Meu chefe pode me apoiar se você ligar para ele. [cite: 30, 32, 45]",
+                expl: "Back up significa apoiar ou confirmar o que alguém disse. [cite: 16, 45]"
+            },
+            {
+                q: "Even though he was wrong, he was too proud to ________ and apologize.",
+                options: ["back out", "back down", "back up", "back off"],
+                correct: 1,
+                img: "",
+                trans: "Mesmo ele estando errado, era orgulhoso demais para retroceder e pedir desculpas. [cite: 35, 49]",
+                expl: "Back down é usado para ceder em uma discussão ou admitir erro. [cite: 12, 49, 50]"
+            },
+            {
+                q: "Be careful when you ________ the driveway; don't hit the mailbox.",
+                options: ["back into", "back out of", "back up", "back away"],
+                correct: 0,
+                img: "",
+                trans: "Cuidado quando entrar de ré na garagem; não bata na caixa de correio. [cite: 36, 37, 52]",
+                expl: "Back into indica o movimento físico de entrar de ré. [cite: 9, 53]"
+            },
+            // Exercícios de Fixação (20 Questões)
+            {
+                q: "The police told the protesters to ________ so that the ambulance could pass.",
+                options: ["back down", "back off", "back out", "back onto"],
+                correct: 1,
+                img: "",
+                trans: "A polícia disse aos manifestantes para se afastarem para a ambulância passar. [cite: 61, 63, 125]",
+                expl: "Back off significa afastar-se ou pedir redução de pressão. [cite: 8, 125]"
+            },
+            {
+                q: "I had to ________ my car ________ the narrow driveway to leave.",
+                options: ["back / away", "back / out of", "back / down", "back / up"],
+                correct: 1,
+                img: "",
+                trans: "Tive que tirar meu carro de ré da garagem estreita para sair. [cite: 65, 67, 126]",
+                expl: "Back out of descreve a manobra de sair de ré de um lugar. [cite: 126]"
+            },
+            {
+                q: "Even under pressure, she didn't ________ and kept her original statement.",
+                options: ["back down", "back up", "back into", "back away"],
+                correct: 0,
+                img: "",
+                trans: "Mesmo sob pressão, ela não cedeu e manteve sua declaração original. [cite: 69, 70, 127]",
+                expl: "Back down refere-se a não ceder em uma posição ou opinião. [cite: 12, 127]"
+            },
+            {
+                q: "The hikers had to ________ slowly when they saw the bear.",
+                options: ["back off", "back out", "back away", "back onto"],
+                correct: 2,
+                img: "",
+                trans: "Os caminhantes tiveram que recuar lentamente quando viram o urso. [cite: 72, 74, 128]",
+                expl: "Back away é o recuo físico por medo ou cautela. [cite: 7, 128]"
+            },
+            {
+                q: "The government is ________ its promise to lower taxes.",
+                options: ["backing up", "backing out of", "backing down", "backing onto"],
+                correct: 1,
+                img: "",
+                trans: "O governo está desistindo de sua promessa de baixar impostos. [cite: 75, 77, 129]",
+                expl: "Backing out of significa desistir de um compromisso ou promessa formal. [cite: 13, 129]"
+            },
+            {
+                q: "Can you ________ me ________ during the meeting? I need support.",
+                options: ["back / off", "back / out", "back / up", "back / down"],
+                correct: 2,
+                img: "",
+                trans: "Você pode me apoiar durante a reunião? Preciso de suporte. [cite: 78, 80, 130]",
+                expl: "Back up é usado para dar suporte ou confirmar fatos. [cite: 16, 130]"
+            },
+            {
+                q: "I accidentally ________ a signpost while parking.",
+                options: ["backed away", "backed into", "backed out of", "backed up"],
+                correct: 1,
+                img: "",
+                trans: "Eu acidentalmente bati de ré em uma placa enquanto estacionava. [cite: 82, 84, 131]",
+                expl: "Back into significa colidir de ré contra algo. [cite: 9, 131]"
+            },
+            {
+                q: "Traffic was ________ for miles because of the accident.",
+                options: ["backed up", "backed off", "backed down", "backed out"],
+                correct: 0,
+                img: "",
+                trans: "O trânsito ficou engarrafado por milhas por causa do acidente. [cite: 85, 87, 132]",
+                expl: "Backed up descreve trânsito represado ou engarrafado. [cite: 18, 132]"
+            },
+            {
+                q: "Don't ________ to me! Be respectful.",
+                options: ["back down", "back up", "talk back", "back away"],
+                correct: 2,
+                img: "",
+                trans: "Não me responda com insolência! Seja respeitoso. [cite: 88, 90, 133]",
+                expl: "Talk back significa responder de forma insolente a uma autoridade. [cite: 20, 133]"
+            },
+            {
+                q: "The hotel rooms ________ a beautiful private garden.",
+                options: ["back onto", "back off", "back down", "back up"],
+                correct: 0,
+                img: "",
+                trans: "Os quartos do hotel dão fundos para um belo jardim privado. [cite: 91, 93, 134]",
+                expl: "Back onto descreve a localização física dos fundos de uma propriedade. [cite: 10, 134]"
+            },
+            {
+                q: "Don't ________ from a challenge just because it's hard.",
+                options: ["back away", "back into", "back up", "back onto"],
+                correct: 0,
+                img: "",
+                trans: "Não recue de um desafio só porque é difícil. [cite: 94, 96, 135]",
+                expl: "Back away (figurativo) significa evitar algo intimidante ou difícil. [cite: 14, 135]"
+            },
+            {
+                q: "I worked three ________ shifts this weekend.",
+                options: ["back down", "back-to-back", "back off", "back out"],
+                correct: 1,
+                img: "",
+                trans: "Trabalhei três turnos seguidos neste fim de semana. [cite: 97, 99, 136]",
+                expl: "Back-to-back refere-se a ações sequenciais sem intervalo. [cite: 21, 136]"
+            },
+            {
+                q: "The protesters refused to ________, even when threatened.",
+                options: ["back down", "back onto", "back up", "back into"],
+                correct: 0,
+                img: "",
+                trans: "Os manifestantes se recusaram a ceder, mesmo quando ameaçados. [cite: 100, 103, 137]",
+                expl: "Back down significa recusar-se a admitir derrota ou abandonar uma posição. [cite: 12, 137]"
+            },
+            {
+                q: "He was going to invest, but he ________ after seeing the risks.",
+                options: ["backed away", "backed out", "backed up", "backed into"],
+                correct: 1,
+                img: "",
+                trans: "Ele ia investir, mas desistiu após ver os riscos. [cite: 102, 106, 138]",
+                expl: "Back out é usado para desistir de um acordo de investimento. [cite: 13, 138]"
+            },
+            {
+                q: "The interviewer asked the candidate to ________ and repeat the last point.",
+                options: ["back out", "back up", "back down", "back off"],
+                correct: 1,
+                img: "",
+                trans: "O entrevistador pediu ao candidato para voltar e repetir o último ponto. [cite: 107, 108, 139]",
+                expl: "Back up aqui significa voltar a um ponto anterior da conversa. [cite: 139]"
+            },
+            {
+                q: "Just ________ and let me handle this; you're making it worse!",
+                options: ["back off", "back onto", "back up", "back into"],
+                correct: 0,
+                img: "",
+                trans: "Apenas se afaste e deixe-me cuidar disso; você está piorando as coisas! [cite: 109, 111, 140]",
+                expl: "Back off é um comando para alguém parar de interferir. [cite: 8, 140]"
+            },
+            {
+                q: "The boat had to ________ out of the harbor carefully.",
+                options: ["back down", "back off", "back out", "back onto"],
+                correct: 2,
+                img: "",
+                trans: "O barco teve que sair de ré do porto cuidadosamente. [cite: 112, 114, 141]",
+                expl: "Back out é a manobra física de saída de ré (também para barcos). [cite: 141]"
+            },
+            {
+                q: "You must ________ your claims with scientific evidence.",
+                options: ["back up", "back away", "back out", "back down"],
+                correct: 0,
+                img: "",
+                trans: "Você deve fundamentar suas alegações com evidências científicas. [cite: 115, 117, 142]",
+                expl: "Back up significa fundamentar argumentos ou dar suporte a uma ideia. [cite: 16, 142]"
+            },
+            {
+                q: "The suspect began to ________ when he saw the K9 unit.",
+                options: ["back away", "back up", "back out", "back down"],
+                correct: 0,
+                img: "",
+                trans: "O suspeito começou a recuar quando viu a unidade K9. [cite: 118, 120, 143]",
+                expl: "Back away descreve o movimento físico de recuo por medo. [cite: 7, 143]"
+            },
+            {
+                q: "The brand had to ________ its claims after the scandal.",
+                options: ["back down from", "back onto", "back out of", "back into"],
+                correct: 0,
+                img: "",
+                trans: "A marca teve que retirar suas alegações após o escândalo. [cite: 121, 123, 144]",
+                expl: "Back down from significa retirar uma afirmação após prova em contrário. [cite: 144]"
+            }
+        ];
+
+        const quizContainer = document.getElementById('quiz');
+
+        questions.forEach((item, index) => {
+            const qDiv = document.createElement('div');
+            qDiv.className = 'question-container';
+            
+            let optionsHtml = item.options.map((opt, i) => 
+                `<button onclick="checkAnswer(${index}, ${i}, this)">${opt}</button>`
+            ).join('');
+
+            qDiv.innerHTML = `
+                <p><strong>Questão ${index + 1}:</strong> ${item.q}</p>
+                <div class="options">${optionsHtml}</div>
+                <div id="feedback-${index}" class="feedback">
+                    <p class="result-text"></p>
+                    <p class="translation">Tradução: ${item.trans}</p>
+                    <p><strong>Explicação:</strong> ${item.expl}</p>
+                    ${item.img}
+                </div>
+            `;
+            quizContainer.appendChild(qDiv);
+        });
+
+        function checkAnswer(qIndex, oIndex, btn) {
+            const feedback = document.getElementById(`feedback-${qIndex}`);
+            const resultText = feedback.querySelector('.result-text');
+            const buttons = btn.parentElement.querySelectorAll('button');
+            
+            buttons.forEach(b => b.disabled = true);
+            feedback.style.display = 'block';
+
+            if (oIndex === questions[qIndex].correct) {
+                resultText.innerHTML = "<strong>Correto!</strong>";
+                feedback.className = 'feedback correct';
+                btn.style.backgroundColor = '#c3e6cb';
+            } else {
+                resultText.innerHTML = `<strong>Incorreto.</strong> A resposta correta era: ${questions[qIndex].options[questions[qIndex].correct]}`;
+                feedback.className = 'feedback incorrect';
+                btn.style.backgroundColor = '#f5c6cb';
+            }
+        }
+    </script>
+</body>
+</html>
